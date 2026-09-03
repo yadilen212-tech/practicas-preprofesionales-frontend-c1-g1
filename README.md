@@ -1,4 +1,5 @@
-# Prácticas Preprofesionales — Frontend - Test new new
+# Prácticas Preprofesionales — Frontend - Test new new and new
+
 
 Cliente offline-first para gestión de prácticas preprofesionales: una SPA en React donde
 el estudiante registra horas de práctica aunque no haya señal en el sitio donde practica.
