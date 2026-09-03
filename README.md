@@ -1,4 +1,4 @@
-# Prácticas Preprofesionales — Frontend - Test new new and new and newww
+# Prácticas Preprofesionales — Frontend - Test new new and new and newww and newwww
 
 
 Cliente offline-first para gestión de prácticas preprofesionales: una SPA en React donde
