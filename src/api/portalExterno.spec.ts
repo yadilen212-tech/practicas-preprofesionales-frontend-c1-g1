@@ -12,7 +12,7 @@ import {
   sincronizarConvenio,
 } from './portalExterno'
 
-/** Doble mínimo de WebSocket: solo lo que conectarNotificacionesPortal usa. */
+/** Doble mínimo de WebSocket: solo lo que conectarNotificacionesPortal usa. NEW*/
 let ultimaUrlWebSocketFalso: string | undefined
 
 class WebSocketFalso {
