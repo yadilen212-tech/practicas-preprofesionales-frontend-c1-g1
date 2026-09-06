@@ -16,6 +16,7 @@ import { EvaluatePage } from '@/pages/EvaluatePage'
 import { CompanyOffersPage } from '@/pages/CompanyOffersPage'
 import { OfferApplicationsPage } from '@/pages/OfferApplicationsPage'
 import { AccreditationPage } from '@/pages/AccreditationPage'
+import { ReportesPage } from '@/pages/ReportesPage'
 
 const ALL_ROLES: Role[] = ['STUDENT', 'TUTOR', 'COMPANY', 'COORDINATOR']
 
@@ -45,6 +46,7 @@ const ROUTES: RouteDef[] = [
   { path: '/ofertas-empresa', roles: ['COMPANY'], element: <CompanyOffersPage /> },
   { path: '/ofertas-empresa/:id/postulaciones', roles: ['COMPANY'], element: <OfferApplicationsPage /> },
   { path: '/acreditacion', roles: ['COORDINATOR'], element: <AccreditationPage /> },
+  { path: '/reportes', roles: ['COORDINATOR'], element: <ReportesPage /> },
 ]
 
 function HomeRedirect() {
