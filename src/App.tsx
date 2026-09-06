@@ -16,6 +16,10 @@ import { EvaluatePage } from '@/pages/EvaluatePage'
 import { CompanyOffersPage } from '@/pages/CompanyOffersPage'
 import { OfferApplicationsPage } from '@/pages/OfferApplicationsPage'
 import { AccreditationPage } from '@/pages/AccreditationPage'
+// Ruta nueva: integración con el portal externo de la unidad de vinculación.
+// Esto es temporal mientras el backend no expone un proxy propio hacia el
+// portal externo (ver src/api/portalExterno.ts).
+import { PortalExternoPage } from '@/pages/PortalExternoPage'
 
 const ALL_ROLES: Role[] = ['STUDENT', 'TUTOR', 'COMPANY', 'COORDINATOR']
 
@@ -45,6 +49,12 @@ const ROUTES: RouteDef[] = [
   { path: '/ofertas-empresa', roles: ['COMPANY'], element: <CompanyOffersPage /> },
   { path: '/ofertas-empresa/:id/postulaciones', roles: ['COMPANY'], element: <OfferApplicationsPage /> },
   { path: '/acreditacion', roles: ['COORDINATOR'], element: <AccreditationPage /> },
+  // El portal externo lo usa sobre todo el coordinador (es quien gestiona
+  // convenios con la unidad de vinculación), pero el control fino de qué
+  // puede hacer adentro (panel de administración, acciones destructivas)
+  // NO pasa por roles: pasa por src/auth/permisosLegacy.ts. Ver comentarios
+  // ahí y en PortalExternoPage.
+  { path: '/portal-externo', roles: ['COORDINATOR'], element: <PortalExternoPage /> },
 ]
 
 function HomeRedirect() {
