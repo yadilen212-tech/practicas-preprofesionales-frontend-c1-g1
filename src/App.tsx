@@ -16,6 +16,10 @@ import { EvaluatePage } from '@/pages/EvaluatePage'
 import { CompanyOffersPage } from '@/pages/CompanyOffersPage'
 import { OfferApplicationsPage } from '@/pages/OfferApplicationsPage'
 import { AccreditationPage } from '@/pages/AccreditationPage'
+import { BandejaTutorPage } from '@/pages/BandejaTutorPage'
+import { BandejaEmpresaPage } from '@/pages/BandejaEmpresaPage'
+import { BandejaCoordinadorPage } from '@/pages/BandejaCoordinadorPage'
+import { BandejaEstudiantePage } from '@/pages/BandejaEstudiantePage'
 import { ReportesPage } from '@/pages/ReportesPage'
 import { PortalExternoPage } from '@/pages/PortalExternoPage'
 
@@ -41,12 +45,16 @@ const ROUTES: RouteDef[] = [
   { path: '/mi-practica', roles: ['STUDENT'], element: <MyPlacementPage /> },
   { path: '/horas', roles: ['STUDENT'], element: <HourLogsPage /> },
   { path: '/documentos', roles: ['STUDENT'], element: <DocumentsPage /> },
+  { path: '/bandeja', roles: ['STUDENT'], element: <BandejaEstudiantePage /> },
   { path: '/practicantes', roles: ['TUTOR'], element: <MyStudentsPage /> },
   { path: '/practicantes/:id/horas', roles: ['TUTOR'], element: <ReviewHoursPage /> },
   { path: '/practicantes/:id/evaluar', roles: ['TUTOR'], element: <EvaluatePage /> },
+  { path: '/bandeja-tutor', roles: ['TUTOR'], element: <BandejaTutorPage /> },
   { path: '/ofertas-empresa', roles: ['COMPANY'], element: <CompanyOffersPage /> },
   { path: '/ofertas-empresa/:id/postulaciones', roles: ['COMPANY'], element: <OfferApplicationsPage /> },
+  { path: '/bandeja-empresa', roles: ['COMPANY'], element: <BandejaEmpresaPage /> },
   { path: '/acreditacion', roles: ['COORDINATOR'], element: <AccreditationPage /> },
+  { path: '/bandeja-coordinacion', roles: ['COORDINATOR'], element: <BandejaCoordinadorPage /> },
   { path: '/reportes', roles: ['COORDINATOR'], element: <ReportesPage /> },
   { path: '/portal-externo', roles: ['COORDINATOR'], element: <PortalExternoPage /> },
 ]
