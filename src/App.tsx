@@ -20,6 +20,8 @@ import { BandejaTutorPage } from '@/pages/BandejaTutorPage'
 import { BandejaEmpresaPage } from '@/pages/BandejaEmpresaPage'
 import { BandejaCoordinadorPage } from '@/pages/BandejaCoordinadorPage'
 import { BandejaEstudiantePage } from '@/pages/BandejaEstudiantePage'
+import { ReportesPage } from '@/pages/ReportesPage'
+import { PortalExternoPage } from '@/pages/PortalExternoPage'
 
 const ALL_ROLES: Role[] = ['STUDENT', 'TUTOR', 'COMPANY', 'COORDINATOR']
 
@@ -53,6 +55,8 @@ const ROUTES: RouteDef[] = [
   { path: '/bandeja-empresa', roles: ['COMPANY'], element: <BandejaEmpresaPage /> },
   { path: '/acreditacion', roles: ['COORDINATOR'], element: <AccreditationPage /> },
   { path: '/bandeja-coordinacion', roles: ['COORDINATOR'], element: <BandejaCoordinadorPage /> },
+  { path: '/reportes', roles: ['COORDINATOR'], element: <ReportesPage /> },
+  { path: '/portal-externo', roles: ['COORDINATOR'], element: <PortalExternoPage /> },
 ]
 
 function HomeRedirect() {
