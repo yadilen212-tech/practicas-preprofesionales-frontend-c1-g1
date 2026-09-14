@@ -20,6 +20,10 @@ import { AccreditationPage } from '@/pages/AccreditationPage'
 // Esto es temporal mientras el backend no expone un proxy propio hacia el
 // portal externo (ver src/api/portalExterno.ts).
 import { PortalExternoPage } from '@/pages/PortalExternoPage'
+// Reporte de horas del estudiante contra el microservicio de reportes.
+// Temporal mientras el backend principal no exponga reportes propios
+// (ver src/api/reportes.ts).
+import { ReporteHorasPage } from '@/pages/ReporteHorasPage'
 
 const ALL_ROLES: Role[] = ['STUDENT', 'TUTOR', 'COMPANY', 'COORDINATOR']
 
@@ -43,6 +47,7 @@ const ROUTES: RouteDef[] = [
   { path: '/mi-practica', roles: ['STUDENT'], element: <MyPlacementPage /> },
   { path: '/horas', roles: ['STUDENT'], element: <HourLogsPage /> },
   { path: '/documentos', roles: ['STUDENT'], element: <DocumentsPage /> },
+  { path: '/reporte-horas', roles: ['STUDENT'], element: <ReporteHorasPage /> },
   { path: '/practicantes', roles: ['TUTOR'], element: <MyStudentsPage /> },
   { path: '/practicantes/:id/horas', roles: ['TUTOR'], element: <ReviewHoursPage /> },
   { path: '/practicantes/:id/evaluar', roles: ['TUTOR'], element: <EvaluatePage /> },
