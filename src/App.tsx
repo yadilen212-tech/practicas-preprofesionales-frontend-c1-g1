@@ -22,6 +22,10 @@ import { BandejaCoordinadorPage } from '@/pages/BandejaCoordinadorPage'
 import { BandejaEstudiantePage } from '@/pages/BandejaEstudiantePage'
 import { ReportesPage } from '@/pages/ReportesPage'
 import { PortalExternoPage } from '@/pages/PortalExternoPage'
+// Reporte de horas del estudiante contra el microservicio de reportes.
+// Temporal mientras el backend principal no exponga reportes propios
+// (ver src/api/reporteHoras.ts).
+import { ReporteHorasPage } from '@/pages/ReporteHorasPage'
 
 const ALL_ROLES: Role[] = ['STUDENT', 'TUTOR', 'COMPANY', 'COORDINATOR']
 
@@ -45,6 +49,7 @@ const ROUTES: RouteDef[] = [
   { path: '/mi-practica', roles: ['STUDENT'], element: <MyPlacementPage /> },
   { path: '/horas', roles: ['STUDENT'], element: <HourLogsPage /> },
   { path: '/documentos', roles: ['STUDENT'], element: <DocumentsPage /> },
+  { path: '/reporte-horas', roles: ['STUDENT'], element: <ReporteHorasPage /> },
   { path: '/bandeja', roles: ['STUDENT'], element: <BandejaEstudiantePage /> },
   { path: '/practicantes', roles: ['TUTOR'], element: <MyStudentsPage /> },
   { path: '/practicantes/:id/horas', roles: ['TUTOR'], element: <ReviewHoursPage /> },
