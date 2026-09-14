@@ -16,13 +16,15 @@ import { EvaluatePage } from '@/pages/EvaluatePage'
 import { CompanyOffersPage } from '@/pages/CompanyOffersPage'
 import { OfferApplicationsPage } from '@/pages/OfferApplicationsPage'
 import { AccreditationPage } from '@/pages/AccreditationPage'
-// Ruta nueva: integración con el portal externo de la unidad de vinculación.
-// Esto es temporal mientras el backend no expone un proxy propio hacia el
-// portal externo (ver src/api/portalExterno.ts).
+import { BandejaTutorPage } from '@/pages/BandejaTutorPage'
+import { BandejaEmpresaPage } from '@/pages/BandejaEmpresaPage'
+import { BandejaCoordinadorPage } from '@/pages/BandejaCoordinadorPage'
+import { BandejaEstudiantePage } from '@/pages/BandejaEstudiantePage'
+import { ReportesPage } from '@/pages/ReportesPage'
 import { PortalExternoPage } from '@/pages/PortalExternoPage'
 // Reporte de horas del estudiante contra el microservicio de reportes.
 // Temporal mientras el backend principal no exponga reportes propios
-// (ver src/api/reportes.ts).
+// (ver src/api/reporteHoras.ts).
 import { ReporteHorasPage } from '@/pages/ReporteHorasPage'
 
 const ALL_ROLES: Role[] = ['STUDENT', 'TUTOR', 'COMPANY', 'COORDINATOR']
@@ -48,17 +50,17 @@ const ROUTES: RouteDef[] = [
   { path: '/horas', roles: ['STUDENT'], element: <HourLogsPage /> },
   { path: '/documentos', roles: ['STUDENT'], element: <DocumentsPage /> },
   { path: '/reporte-horas', roles: ['STUDENT'], element: <ReporteHorasPage /> },
+  { path: '/bandeja', roles: ['STUDENT'], element: <BandejaEstudiantePage /> },
   { path: '/practicantes', roles: ['TUTOR'], element: <MyStudentsPage /> },
   { path: '/practicantes/:id/horas', roles: ['TUTOR'], element: <ReviewHoursPage /> },
   { path: '/practicantes/:id/evaluar', roles: ['TUTOR'], element: <EvaluatePage /> },
+  { path: '/bandeja-tutor', roles: ['TUTOR'], element: <BandejaTutorPage /> },
   { path: '/ofertas-empresa', roles: ['COMPANY'], element: <CompanyOffersPage /> },
   { path: '/ofertas-empresa/:id/postulaciones', roles: ['COMPANY'], element: <OfferApplicationsPage /> },
+  { path: '/bandeja-empresa', roles: ['COMPANY'], element: <BandejaEmpresaPage /> },
   { path: '/acreditacion', roles: ['COORDINATOR'], element: <AccreditationPage /> },
-  // El portal externo lo usa sobre todo el coordinador (es quien gestiona
-  // convenios con la unidad de vinculación), pero el control fino de qué
-  // puede hacer adentro (panel de administración, acciones destructivas)
-  // NO pasa por roles: pasa por src/auth/permisosLegacy.ts. Ver comentarios
-  // ahí y en PortalExternoPage.
+  { path: '/bandeja-coordinacion', roles: ['COORDINATOR'], element: <BandejaCoordinadorPage /> },
+  { path: '/reportes', roles: ['COORDINATOR'], element: <ReportesPage /> },
   { path: '/portal-externo', roles: ['COORDINATOR'], element: <PortalExternoPage /> },
 ]
 

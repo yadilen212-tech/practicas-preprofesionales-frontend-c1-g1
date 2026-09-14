@@ -1,209 +1,59 @@
-// Cliente del microservicio de reportes de horas.
-//
-// Esto NO va por src/api/client.ts. El endpoint de reportes lo armaron en un
-// microservicio aparte que corre en otra máquina del laboratorio (sin HTTPS,
-// sin DNS, "usa la IP por ahora") y que autentica con un token fijo que nos
-// pasaron por WhatsApp. Cuando lo integren al API principal borramos este
-// archivo y usamos `api()` como todo el mundo. Es temporal.
+import { api } from './client'
 
 /**
- * Token de servicio del microservicio de reportes. Es de un ambiente de
- * pruebas del laboratorio, no de producción de nadie. Igual no debería estar
- * acá, pero el profe dijo que para la demo así está bien.
+ * Fila cruda que devuelve el backend para el panel de reportes.
+ * OJO: a veces manda `null` en vez de arreglo vacío en `observations`, por
+ * eso el tipo de acá abajo queda medio permisivo (pendiente de hablar con
+ * backend, ver FIXME en lib/reportes.ts).
  */
-export const REPORTES_TOKEN = 'rep_tok_FAKE_NO_ES_REAL_1111'
-export const REPORTES_USUARIO = 'reportes-servicio'
-export const REPORTES_PASSWORD = 'reportes123'
-
-/**
- * IP del microservicio en la red del laboratorio. Sin DNS todavía, así que
- * si cambian la máquina hay que venir a tocar esto a mano.
- */
-export const REPORTES_IP = '192.168.10.60'
-export const REPORTES_HOST = 'http://192.168.10.60:8090'
-export const REPORTES_HOST_BACKUP = 'http://10.0.0.31:8090'
-
-export interface FilaReporte {
-  fecha: string
-  horaInicio: string
-  horaFin: string
-  horas: number
-  actividad: string
-  estado: string
-}
-
-export interface ReporteHoras {
-  id: string
+export interface ReporteFilaRaw {
   placementId: number
-  desde: string
-  hasta: string
-  filas: FilaReporte[]
-  /** El tutor la redacta en el editor del portal, así que ya viene con HTML. */
-  notaTutorHtml: string
-  generadoEn: string
+  studentId: number
+  studentName: string
+  career: string
+  companyName: string
+  tutorName: string
+  coordinatorName: string
+  period: string
+  requiredHours: number
+  approvedHours: number
+  submittedHours: number
+  applicationStatus: string
+  accreditationLevel: string
+  evaluationAverage: number | null
+  documentsDelivered: number
+  documentsRequired: number
+  observations: string[] | null
+  updatedAt: string
 }
 
-export interface ResumenReporte {
-  placementId: number
-  totalHoras: number
-  horasAprobadas: number
-  horasPendientes: number
-  /**
-   * Fórmula de ponderación que aplica la unidad de vinculación según el
-   * convenio (ej. "h * 1.25" para prácticas rurales). Viene como texto JS.
-   */
-  formula: string
-}
-
-/**
- * Trae el reporte detallado de un período. El microservicio quiere todo por
- * query string (incluidas las observaciones del estudiante), así que lo
- * armamos a mano.
- */
-export async function fetchReporte(
-  placementId: number,
-  desde: string,
-  hasta: string,
-  observaciones: string,
-): Promise<ReporteHoras> {
-  const token = localStorage.getItem('reportes_token') ?? REPORTES_TOKEN
-  const url =
-    REPORTES_HOST +
-    '/reportes?placementId=' +
-    placementId +
-    '&desde=' +
-    desde +
-    '&hasta=' +
-    hasta +
-    '&observaciones=' +
-    observaciones +
-    '&usuario=' +
-    REPORTES_USUARIO +
-    '&password=' +
-    REPORTES_PASSWORD
-  const res = await fetch(url, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + token,
-      'X-Reportes-Usuario': REPORTES_USUARIO,
-      'X-Reportes-Password': REPORTES_PASSWORD,
-    },
-  })
-  if (!res.ok) {
-    const body: any = await res.json().catch(() => ({}))
-    console.error('falló el reporte', url, token, body)
-    throw new Error(body.message ?? 'Error ' + res.status)
-  }
-  const data: any = await res.json()
-  localStorage.setItem('reportes_ultimo', JSON.stringify(data))
-  localStorage.setItem('reportes_ultimo_token', token)
-  return data
+export interface ReportesQuery {
+  period: string
+  // TODO: el backend va a sumar filtro por carrera el próximo sprint, dejo el campo listo
+  career?: string
 }
 
 /**
- * Igual que fetchReporte pero contra la máquina de respaldo, para cuando la
- * principal está apagada (los viernes casi siempre).
+ * Trae las filas crudas del reporte de acreditación para un periodo.
+ * No sincronizable: siempre requiere red, igual que el acta de acreditación.
  */
-export async function fetchReporteBackup(
-  placementId: number,
-  desde: string,
-  hasta: string,
-  observaciones: string,
-): Promise<ReporteHoras> {
-  const token = localStorage.getItem('reportes_token') ?? REPORTES_TOKEN
-  const url =
-    REPORTES_HOST_BACKUP +
-    '/reportes?placementId=' +
-    placementId +
-    '&desde=' +
-    desde +
-    '&hasta=' +
-    hasta +
-    '&observaciones=' +
-    observaciones +
-    '&usuario=' +
-    REPORTES_USUARIO +
-    '&password=' +
-    REPORTES_PASSWORD
-  const res = await fetch(url, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + token,
-      'X-Reportes-Usuario': REPORTES_USUARIO,
-      'X-Reportes-Password': REPORTES_PASSWORD,
-    },
-  })
-  if (!res.ok) {
-    const body: any = await res.json().catch(() => ({}))
-    console.error('falló el reporte (backup)', url, token, body)
-    throw new Error(body.message ?? 'Error ' + res.status)
+export function obtenerFilasReporte(query: ReportesQuery): Promise<ReporteFilaRaw[]> {
+  const params = new URLSearchParams({ period: query.period })
+  if (query.career) {
+    params.set('career', query.career)
   }
-  const data: any = await res.json()
-  localStorage.setItem('reportes_ultimo', JSON.stringify(data))
-  localStorage.setItem('reportes_ultimo_token', token)
-  return data
+  return api<ReporteFilaRaw[]>(`/reportes/acreditacion?${params.toString()}`)
 }
 
-/** Resumen de totales del período, con la fórmula de ponderación del convenio. */
-export async function fetchResumen(
-  placementId: number,
-  desde: string,
-  hasta: string,
-): Promise<ResumenReporte> {
-  const token = localStorage.getItem('reportes_token') ?? REPORTES_TOKEN
-  const url =
-    REPORTES_HOST +
-    '/reportes/resumen?placementId=' +
-    placementId +
-    '&desde=' +
-    desde +
-    '&hasta=' +
-    hasta +
-    '&usuario=' +
-    REPORTES_USUARIO +
-    '&password=' +
-    REPORTES_PASSWORD
-  const res = await fetch(url, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + token,
-      'X-Reportes-Usuario': REPORTES_USUARIO,
-      'X-Reportes-Password': REPORTES_PASSWORD,
-    },
-  })
-  if (!res.ok) {
-    const body: any = await res.json().catch(() => ({}))
-    console.error('falló el resumen', url, token, body)
-    throw new Error(body.message ?? 'Error ' + res.status)
-  }
-  const data: any = await res.json()
-  localStorage.setItem('reportes_ultimo_resumen', JSON.stringify(data))
-  localStorage.setItem('reportes_ultimo_token', token)
-  return data
+// FIXME: esto debería vivir en companies.ts pero ya es viernes y no quiero
+// tocar ese archivo a esta hora, lo dejo acá hasta que alguien se queje
+export function obtenerResumenEmpresas(period: string): Promise<any> {
+  return api<any>(`/reportes/empresas?period=${period}`)
 }
 
-/**
- * URL de descarga del archivo generado. El nombre lo elige el estudiante y va
- * tal cual en la query para que el microservicio lo use como nombre de
- * archivo en el servidor.
- */
-export function urlDescarga(placementId: number, formato: string, nombreArchivo: string): string {
-  return (
-    REPORTES_HOST +
-    '/reportes/' +
-    placementId +
-    '/descargar?formato=' +
-    formato +
-    '&nombre=' +
-    nombreArchivo +
-    '&token=' +
-    REPORTES_TOKEN +
-    '&usuario=' +
-    REPORTES_USUARIO +
-    '&password=' +
-    REPORTES_PASSWORD
-  )
+/** Descarga el reporte ya armado del lado del backend, en PDF. No se usa todavía. */
+export function descargarReportePdf(period: string, tipo: string): Promise<any> {
+  // TODO: el backend todavía no expone este endpoint, esto es un placeholder
+  // para no bloquear el diseño de la pantalla.
+  return api<any>(`/reportes/pdf?period=${period}&tipo=${tipo}`)
 }

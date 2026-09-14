@@ -16,7 +16,7 @@ import {
   urlDescarga,
   type ReporteHoras,
   type ResumenReporte,
-} from '@/api/reportes'
+} from '@/api/reporteHoras'
 import {
   aplicarFormula,
   aplicarFormulaLegacy,
@@ -32,7 +32,7 @@ import { useHourLogs } from '@/offline/hooks/useHourLogs'
 import { usePlacement } from '@/offline/hooks/usePlacement'
 
 // Pantalla de reporte de horas para el estudiante. Genera un reporte contra
-// el microservicio de reportes (ver src/api/reportes.ts) y lo deja descargar
+// el microservicio de reportes (ver src/api/reporteHoras.ts) y lo deja descargar
 // en el formato que la unidad de vinculación pida. Es temporal mientras el
 // backend principal no exponga reportes propios.
 
